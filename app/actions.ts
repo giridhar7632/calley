@@ -2,7 +2,6 @@
 
 import { ExcelData } from "@/components/ShowData"
 import { auth, signIn, signOut } from "@/lib/auth"
-import fs from 'fs'
 
 export async function signInAction() {
     await signIn('google')
@@ -59,9 +58,6 @@ Content-Type: application/json
     });
 
     batchBody += `--${boundary}--`;
-
-    fs.writeFileSync("batchBody.txt", batchBody);
-
     const res = await fetch("https://www.googleapis.com/batch/calendar/v3", {
         method: "POST",
         headers: {
@@ -71,8 +67,6 @@ Content-Type: application/json
         },
         body: batchBody,
     });
-
-    fs.writeFileSync("batchResponse.txt", await res.text());
 
     if (!res.ok) {
         const errorData = await res.text();
