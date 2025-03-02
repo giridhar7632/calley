@@ -6,9 +6,10 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table";
+import { ExcelData } from "./ShowData";
   
   interface DataTableProps {
-    data: any[];
+    data: ExcelData[];
     columns: string[];
   }
   

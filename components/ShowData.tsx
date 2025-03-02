@@ -13,7 +13,7 @@ export interface ExcelData {
   [key: string]: any;
 }
 
-export const parseExcel = (file: File): Promise<{ data: ExcelData[]; columns: any[] }> => {
+export const parseExcel = (file: File): Promise<{ data: ExcelData[]; columns: string[] }> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -35,7 +35,7 @@ export const parseExcel = (file: File): Promise<{ data: ExcelData[]; columns: an
         const rows = jsonData.slice(1).map(row => {
           const obj: ExcelData = {};
           headers.forEach((header, index) => {
-            let cellValue = row[index];
+            const cellValue = row[index];
             if (["date", "time"].some((word) => header.toLowerCase().includes(word)) && typeof cellValue === "number") {
               const parsedDate = XLSX.SSF.format("yyyy-mm-dd HH:MM", cellValue);
               obj[header] = parsedDate;

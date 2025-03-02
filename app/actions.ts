@@ -15,7 +15,7 @@ export async function signOutAction() {
 export async function createCalendarEvent(events: ExcelData[], timeZone: string) {
     const session = await auth();
 
-    //@ts-expect-error
+    //@ts-expect-error next auth do not have accessToken in the type
     if (!session || !session?.accessToken) {
         throw new Error("Not authenticated");
     }
@@ -65,7 +65,7 @@ Content-Type: application/json
     const res = await fetch("https://www.googleapis.com/batch/calendar/v3", {
         method: "POST",
         headers: {
-            // @ts-expect-error
+            // @ts-expect-error next auth do not have accessToken in the type
             "Authorization": `Bearer ${session.accessToken}`,
             "Content-Type": `multipart/mixed; boundary=${boundary}`,
         },

@@ -37,7 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // @ts-expect-error
+      // @ts-expect-error next auth do not have accessToken in the type
       session.accessToken = token.accessToken;
       return session;
     },
