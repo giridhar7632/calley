@@ -1,34 +1,10 @@
-'use client'
+import { auth } from '@/lib/auth';
+import ShowData from '@/components/ShowData';
+import { SignIn, SignOut } from '@/components/Auth';
 
-import { useState } from 'react';
-import { FileUpload } from '@/components/FileUpload';
-import { DataTable } from '@/components/DataTable';
-import { Button } from '@/components/ui/button';
-import { Calendar } from 'lucide-react';
+export default async function Index() {
 
-export default function Index() {
-  const [excelData, setExcelData] = useState<any[]>([]);
-  const [columns, setColumns] = useState<string[]>([]);
-
-  const handleFileAccepted = async (file: File) => {
-    // In v1, we'll just show a placeholder table
-    // In v2, we'll implement actual Excel parsing
-    setColumns(['Event', 'Date', 'Time', 'Location']);
-    setExcelData([
-      {
-        Event: 'Team Meeting',
-        Date: '2024-03-01',
-        Time: '10:00 AM',
-        Location: 'Conference Room A',
-      },
-      {
-        Event: 'Client Presentation',
-        Date: '2024-03-02',
-        Time: '2:00 PM',
-        Location: 'Virtual',
-      },
-    ]);
-  };
+  const session = await auth()
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -40,24 +16,13 @@ export default function Index() {
           <p className="mt-3 text-lg text-gray-500">
             Import your events from Excel to Google Calendar in seconds
           </p>
+          <p className='italic text-gray-500'>Download the <a className="underline" href="/cally-template.xlsx">template</a> and fill it out</p>
         </div>
 
-        <div className="bg-white shadow-sm rounded-lg p-6 space-y-6">
-          <FileUpload onFileAccepted={handleFileAccepted} />
-          
-          {excelData.length > 0 && (
-            <div className="space-y-4">
-              <DataTable data={excelData} columns={columns} />
-              
-              <div className="flex justify-end">
-                <Button className="space-x-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>Import to Calendar</span>
-                </Button>
-              </div>
-            </div>
-          )}
+        <div className="bg-white shadow-sm rounded-lg p-6 space-y-6 flex flex-col justify-center items-center">
+          {session ? <ShowData /> : <SignIn />}
         </div>
+        {session && <p className='text-center text-xs text-gray-500 italic'>Signed in as: {session?.user?.email}, <SignOut /></p>}
       </div>
     </div>
   );
